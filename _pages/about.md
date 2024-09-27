@@ -6,8 +6,8 @@ subtitle: MD-PhD in <a href='https://www.hst.mit.edu'>HST</a>. MD Candidate at H
 
 profile:
   align: right
-  image: zeshan_profile_pic.jpg
-  image_circular: false # crops the image to make it circular
+  image: zeshan_profile_pic_alternate.png
+  image_circular: true # crops the image to make it circular
   more_info: >
     <p>📍Cambridge, MA</p>
 
