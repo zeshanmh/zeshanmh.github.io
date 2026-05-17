@@ -476,8 +476,8 @@ html[data-theme="dark"] ol.bibliography li .links a.btn {
 // thumbnail size, change --pub-thumb-width-mobile / --pub-thumb-max-height-mobile.
 @media (max-width: 575.98px) {
   :root {
-    --pub-thumb-width-mobile: 160px;
-    --pub-thumb-max-height-mobile: 120px;
+    --pub-thumb-width-mobile: 100%;     // fill the card width
+    --pub-thumb-max-height-mobile: 180px;
   }
 
   ol.bibliography {
@@ -485,26 +485,43 @@ html[data-theme="dark"] ol.bibliography li .links a.btn {
       padding: 1.25rem;
       border-radius: 10px;
 
-      // On mobile, the thumbnail column shrinks and stacks above the text
-      .abbr {
-        flex: 0 0 100% !important;
-        max-width: 100% !important;
-        flex-direction: row;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-bottom: 0.75rem;
+      // Stack thumbnail above text — switch the row to a vertical layout
+      .row {
+        flex-direction: column !important;
+        flex-wrap: wrap !important;
+        gap: 1rem;
       }
 
-      figure.preview,
+      // Thumbnail column takes full width and centers its contents above the text
+      .abbr {
+        flex: 0 0 auto !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        margin-bottom: 0;
+      }
+
+      // Text column reverts to full-width below the thumbnail
+      .col-sm-8,
+      .col-sm-10 {
+        flex: 0 0 auto !important;
+        max-width: 100% !important;
+        width: 100%;
+      }
+
+      // Thumbnail itself fills the card width on mobile (selectors match the
+      // actual DOM: bare <figure> wrapper and the .preview class on the <img>)
+      figure {
+        max-width: var(--pub-thumb-width-mobile);
+      }
+
+      figure img,
       .preview {
         max-width: var(--pub-thumb-width-mobile) !important;
         max-height: var(--pub-thumb-max-height-mobile);
-      }
-
-      figure.preview img {
-        max-width: var(--pub-thumb-width-mobile) !important;
-        max-height: var(--pub-thumb-max-height-mobile);
+        width: 100% !important;
       }
     }
   }
