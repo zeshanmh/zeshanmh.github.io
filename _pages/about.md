@@ -2,38 +2,34 @@
 layout: about
 title: about
 permalink: /
-subtitle: MD-PhD in <a href='https://www.hst.mit.edu'>HST</a>. MD Candidate at Harvard Medical School. PhD in <a href='https://www.eecs.mit.edu'>EECS</a> from MIT. 
+subtitle: >
+  Internal Medicine Resident, <a href='https://www.brighamandwomens.org'>Brigham and Women's Hospital</a>.
+  MD–PhD, <a href='https://hst.mit.edu'>Harvard Medical School (HST)</a> · <a href='https://www.eecs.mit.edu'>MIT EECS</a>.
 
 profile:
   align: right
   image: zeshan_profile_pic_alternate.png
   image_circular: true # crops the image to make it circular
   more_info: >
-    <p>📍Cambridge, MA</p>
+    <p>📍Boston, MA</p>
 
 news: true # includes a list of news items
 selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
---- 
+---
 
-Hello! I am an MD-PhD student in the Harvard-MIT Health, Sciences, and Technology (HST) program. I recently completed my PhD in Computer Science at MIT, working with [David Sontag](https://people.csail.mit.edu/dsontag/) in the [Clinical ML group](http://clinicalml.org/). 
+I am an internal medicine resident at Brigham and Women's Hospital and an MD–PhD graduate of the [Harvard–MIT Health Sciences and Technology (HST)](https://www.hst.mit.edu) program. My PhD was completed in the [Clinical ML group](http://clinicalml.org/) at MIT, advised by [David Sontag](https://people.csail.mit.edu/dsontag/).
 
-My research broadly deals with developing machine learning methods to assist and improve clinical decision-making in healthcare settings, with the ultimate goal of deploying robust and scalable clinical decision support systems. I am specifically interested in deep generative models of clinical sequential data, causal inference, and physician-AI interaction. See below for further details.
+My research develops machine learning methods at the intersection of representation learning, causal inference, and physician–AI interaction, with a primary clinical focus in oncology. Current directions include improving sample efficiency for LLM-based clinical prediction, integrating real-world evidence with experimental data for reliable causal effect estimation, and studying how physicians interact with AI-based recommendations in practice.
 
-Previously, I completed by B.S. and M.S. in Computer Science from Stanford University. I worked on deep learning for medical imaging and data augmentation methods with [Daniel Rubin](https://profiles.stanford.edu/daniel-rubin) and [Chris Re](https://cs.stanford.edu/~chrismre/). 
+Previously, I completed my B.S. and M.S. in Computer Science from Stanford University, where I worked on deep learning for medical imaging and data augmentation with [Daniel Rubin](https://profiles.stanford.edu/daniel-rubin) and [Chris Ré](https://cs.stanford.edu/~chrismre/).
 
 ## Research
-My work involves building out the machine learning and statistical methods forming the machinery for future clinical decision support systems that will be used to manage patients with chronic health conditions. During my PhD, I focused on [precision oncology](https://dspace.mit.edu/handle/1721.1/152693), but these ideas extend naturally to any disease process where there is uncertainty in therapeutic management as well as uncertainty in how patients respond to therapy. 
 
-Thus far, I have pursued research along several themes: 
+My work focuses on building ML methods that are both statistically rigorous and clinically deployable, with [precision oncology](https://dspace.mit.edu/handle/1721.1/152693) as the primary application. I have pursued research along three themes:
 
-* **How will my patient respond holistically to a chosen therapeutic regimen?** – Oncologists, and physicians more generally, approach choosing a treatment for their patients multifactorially, e.g. maximizing patient survival, minimizing adverse events, improving quality of life, etc. I have looked at building predictive models of clinical temporal data both focused on particular tasks (e.g. biomarker forecasting, as in [\[ICML 2021\]](https://proceedings.mlr.press/v139/hussain21a.html)) and also general models that provide multitask predictions to enable holistic management [\[<i>npj</i> Digital Medicine\]](https://www.nature.com/articles/s41746-024-01189-3).
-* **How can I ''sanity check'' predictive and causal estimates produced by ML models for my patients?** Additional context for predictions from ML models for a new patient or a specific patient population can help a physician better assess the reliability of the output. One approach for providing this context is through uncertainty quantification, where we use techniques from conformal inference to give valid confidence intervals of ML model predictions [\[AISTATS 2023\]](https://proceedings.mlr.press/v206/alaa23a.html). Another is by using experimental data as a means of assessing reliability of causal estimates inferred from observational data [\[NeurIPS 2022\]](https://proceedings.neurips.cc/paper_files/paper/2022/hash/28b5dfc51e5ae12d84fb7c6172a00df4-Abstract-Conference.html).
-* **How will AI-based clinical decision support systems impact physician behavior?** I studied physician-AI interaction in clinical oncology, where I built a prototype of a clinical decision support system. With it, I ran user studies to assess how physicians interact with simulated versions of the above methods and how their decision-making was impacted [\[Preprint\]](http://arxiv.org/abs/2404.15187).
+* **How will my patient respond holistically to a chosen therapeutic regimen?** Oncologists approach treatment selection multifactorially — maximizing survival, minimizing adverse events, improving quality of life. I have built predictive models of longitudinal patient trajectories that provide multitask predictions to support this kind of holistic management [\[<i>npj</i> Digital Medicine, 2024\]](https://www.nature.com/articles/s41746-024-01189-3). A key bottleneck is labeled data scarcity; more recently I have studied how large language models can construct powerful clinical representations to dramatically improve sample efficiency for downstream prediction tasks [\[arXiv, 2026\]](https://arxiv.org/pdf/2603.11679).
 
+* **How can I trust the causal and predictive estimates my model produces?** Observational data is pervasive in oncology, but estimates derived from it are unreliable without validation. I have developed falsification methods that use experimental data to detect and characterize bias in observational studies [\[NeurIPS 2022\]](https://proceedings.neurips.cc/paper_files/paper/2022/hash/28b5dfc51e5ae12d84fb7c6172a00df4-Abstract-Conference.html) [\[AISTATS 2023\]](https://proceedings.mlr.press/v206/hussain23a/hussain23a.pdf) [\[ICML 2026\]](https://arxiv.org/pdf/2506.01191), and uncertainty quantification methods that produce valid confidence intervals for ML model predictions [\[AISTATS 2023\]](https://proceedings.mlr.press/v206/alaa23a/alaa23a.pdf).
 
-<!-- Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
-
-Put your address / P.O. box / other info right below your picture. You can also disable any of these elements by editing `profile` property of the YAML header of your `_pages/about.md`. Edit `_bibliography/papers.bib` and Jekyll will render your [publications page](/al-folio/publications/) automatically.
-
-Link to your social media connections, too. This theme is set up to use [Font Awesome icons](https://fontawesome.com/) and [Academicons](https://jpswalsh.github.io/academicons/), like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them. -->
+* **How will AI-based decision support change how physicians make decisions?** Deploying AI in the clinic requires understanding how physicians actually use model outputs. I built a prototype clinical decision support system for oncology and ran user studies examining how AI recommendations shape physician decision-making [\[ACM Transactions on Computing for Healthcare, 2026\]](https://arxiv.org/pdf/2404.15187).
