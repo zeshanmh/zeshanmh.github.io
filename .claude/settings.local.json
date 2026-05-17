@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/zeshanmh/vaults/panopticon/03_research/projects/zeshanmh.github.io remote -v)",
+      "Bash(git *)"
+    ]
+  }
+}
