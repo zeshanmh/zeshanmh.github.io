@@ -6,6 +6,7 @@ body {
   padding-bottom: 70px;
   color: var(--global-text-color);
   background-color: var(--global-bg-color);
+  line-height: 1.65;
 
   h1,
   h2,
@@ -38,16 +39,269 @@ body.sticky-bottom-footer {
   }
 }
 
-// TODO: redefine content layout.
+/******************************************************************************
+ * About page — section headers and profile spacing
+ ******************************************************************************/
+
+// Section h2 headers on the about/index page get a stronger visual presence
+.post article > h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding-left: 0.6rem;
+  border-left: 3px solid var(--global-theme-color);
+  line-height: 1.3;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: var(--global-theme-color);
+      text-decoration: none;
+    }
+  }
+}
+
+// Subtitle under the name: graceful wrapping on small screens
+.post-header .desc {
+  line-height: 1.5;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+// Extra vertical breathing room between the profile image and the about text
+// on mobile (the profile floats on >=576px so no gap needed there)
+@media (max-width: 575.98px) {
+  .profile {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/******************************************************************************
+ * News section
+ ******************************************************************************/
+
+.news {
+  .table-sm {
+    td,
+    th {
+      padding-top: 0.45rem;
+      padding-bottom: 0.45rem;
+      line-height: 1.55;
+      vertical-align: top;
+    }
+  }
+}
 
 /******************************************************************************
  * Publications
  ******************************************************************************/
 
-// TODO: redefine publications layout.
+ol.bibliography {
+  li {
+    // Divider between entries — top border, no full card box
+    border-top: 1px solid var(--global-divider-color);
+    padding-top: 1.25rem;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0 !important; // reset _base default; spacing comes from padding now
+
+    // Subtle background shift on hover — academic, not flashy
+    @media (prefers-reduced-motion: no-preference) {
+      transition: background-color 150ms ease;
+    }
+
+    &:hover {
+      background-color: var(--global-card-bg-color);
+    }
+
+    // -----------------------------------------------------------------------
+    // Thumbnail column (.col-sm-2.abbr)
+    // -----------------------------------------------------------------------
+    .abbr {
+      // Keep the badge (venue abbreviation) and thumbnail stacked vertically
+      // with consistent spacing between them
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.4rem;
+
+      // Venue badge. width: auto overrides _base.scss's width: 100% (which
+      // loads after _layout) to keep the badge compact rather than full-width.
+      abbr {
+        display: inline-block;
+        background-color: var(--global-theme-color);
+        width: auto !important;
+        min-width: 3rem;
+        text-align: center;
+        margin-bottom: 0 !important; // gap handles spacing now
+
+        a {
+          color: white;
+
+          &:hover {
+            text-decoration: none;
+          }
+        }
+      }
+    }
+
+    // Preview image — fixed container size, consistent across all entries.
+    // max-width uses !important to override the 200px set in _base.scss which
+    // loads after _layout in the import order.
+    // Also target the wrapping <figure> that figure.liquid emits for local images.
+    figure.preview,
+    .preview {
+      display: block;
+      width: 100% !important;
+      max-width: 96px !important;
+      height: 72px;
+      object-fit: cover;
+      object-position: center top;
+      border-radius: 6px;
+      background-color: var(--global-card-bg-color);
+      margin: 0; // figure has default margins we don't want here
+    }
+
+    figure.preview img {
+      width: 100%;
+      height: 72px;
+      max-width: 96px !important;
+      object-fit: cover;
+      object-position: center top;
+      border-radius: 6px;
+    }
+
+    // -----------------------------------------------------------------------
+    // Content column
+    // -----------------------------------------------------------------------
+    // Use !important only here to ensure 600 beats _base's "bolder" which
+    // loads after _layout in main.scss. "bolder" is relative and can render
+    // heavier than 600 depending on the loaded font; we want consistent weight.
+    .title {
+      font-weight: 600 !important;
+      line-height: 1.45;
+      margin-bottom: 0.15rem;
+    }
+
+    .author {
+      font-size: 0.9rem;
+      color: var(--global-text-color-light);
+      margin-bottom: 0.1rem;
+
+      // Self-author emphasis
+      > em {
+        color: var(--global-text-color);
+        font-style: normal;
+        border-bottom: 1px solid var(--global-text-color);
+      }
+
+      a {
+        color: var(--global-text-color-light);
+        border-bottom: 1px dashed var(--global-theme-color);
+
+        &:hover {
+          color: var(--global-theme-color);
+          border-bottom-style: solid;
+          text-decoration: none;
+        }
+      }
+
+      > span.more-authors {
+        color: var(--global-text-color-light);
+        border-bottom: 1px dashed var(--global-text-color-light);
+        cursor: pointer;
+
+        &:hover {
+          color: var(--global-text-color);
+          border-bottom: 1px dashed var(--global-text-color);
+        }
+      }
+    }
+
+    .periodical {
+      font-size: 0.88rem;
+      color: var(--global-text-color-light);
+    }
+
+    // -----------------------------------------------------------------------
+    // Link buttons — compact, no awkward wrapping
+    // -----------------------------------------------------------------------
+    .links {
+      margin-top: 0.4rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      align-items: center;
+
+      a.btn {
+        color: var(--global-text-color);
+        border: 1px solid var(--global-divider-color);
+        // Use !important to override _base.scss padding-left/right: 1rem which
+        // loads after _layout and would otherwise expand button width.
+        padding: 0.15rem 0.6rem !important;
+        font-size: 0.78rem;
+        line-height: 1.4;
+        margin: 0 !important; // gap handles spacing
+
+        @media (prefers-reduced-motion: no-preference) {
+          transition: color 150ms ease, border-color 150ms ease;
+        }
+
+        &:hover {
+          color: var(--global-theme-color);
+          border-color: var(--global-theme-color);
+          text-decoration: none;
+        }
+      }
+
+      a.award.btn {
+        border-color: var(--global-highlight-color);
+        color: var(--global-highlight-color);
+      }
+    }
+  }
+
+  // First entry has no top divider (it already sits under the h2.bibliography line)
+  li:first-child {
+    border-top: none;
+    padding-top: 0.75rem;
+  }
+}
+
+/******************************************************************************
+ * Mobile — publication card stacking
+ ******************************************************************************/
+
+@media (max-width: 575.98px) {
+  ol.bibliography {
+    li {
+      // When Bootstrap stacks the columns, keep thumbnail small and left-aligned
+      .abbr {
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+      }
+
+      figure.preview,
+      .preview {
+        max-width: 80px !important;
+        height: 60px;
+      }
+
+      figure.preview img {
+        max-width: 80px !important;
+        height: 60px;
+      }
+    }
+  }
+}
 
 /*****************************************************************************
-* Projects
-*****************************************************************************/
+ * Projects
+ *****************************************************************************/
 
 // TODO: redefine projects layout.
