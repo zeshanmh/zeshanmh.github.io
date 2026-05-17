@@ -96,46 +96,140 @@ body.sticky-bottom-footer {
 }
 
 /******************************************************************************
- * Publications
+ * Publications — card style
+ * ============================================================================
+ * QUICK-ADJUST VALUES (edit these to tune the card design):
+ *
+ *   --pub-card-max-width      Width of each card.            Default: 760px
+ *   --pub-card-bg             Card background color.         Default: #f3f5f7
+ *   --pub-card-radius         Corner roundness.              Default: 14px
+ *   --pub-card-padding        Inner padding.                 Default: 1.75rem
+ *   --pub-card-shadow         Drop shadow (resting).         See below
+ *   --pub-card-shadow-hover   Drop shadow on hover.          See below
+ *   --pub-card-accent-color   Left accent bar color.         Default: theme color
+ *   --pub-card-accent-width   Left accent bar width.         Default: 5px
+ *   --pub-thumb-width         Thumbnail max width.           Default: 240px
+ *   --pub-thumb-max-height    Thumbnail max height.          Default: 200px
+ *
+ * Mobile overrides (max-width: 575.98px) live further down the file.
  ******************************************************************************/
 
-ol.bibliography {
-  li {
-    // Divider between entries — top border, no full card box
-    border-top: 1px solid var(--global-divider-color);
-    padding-top: 1.25rem;
-    padding-bottom: 0.75rem;
-    margin-bottom: 0 !important; // reset _base default; spacing comes from padding now
+:root {
+  --pub-card-max-width: 740px;
+  --pub-card-bg: #f3f5f7;
+  --pub-card-radius: 14px;
+  --pub-card-padding: 1.75rem;
+  --pub-card-shadow: 0 6px 18px rgba(0, 0, 0, 0.08),
+                     0 2px 6px rgba(0, 0, 0, 0.05);
+  --pub-card-shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.12),
+                           0 4px 10px rgba(0, 0, 0, 0.06);
+  --pub-card-accent-color: var(--global-theme-color);
+  --pub-card-accent-width: 5px;
+  --pub-thumb-width: 170px;
+  --pub-thumb-max-height: 220px;
+  --pub-thumb-gap: 1.45rem; // horizontal gap between thumbnail and text
+}
 
-    // Subtle background shift on hover — academic, not flashy
+html[data-theme="dark"] {
+  // Dark card bg uses --global-card-bg-color (already #212529, distinct from page bg)
+  --pub-card-bg: var(--global-card-bg-color);
+  --pub-card-shadow: 0 6px 18px rgba(0, 0, 0, 0.4),
+                     0 2px 6px rgba(0, 0, 0, 0.25);
+  --pub-card-shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.5),
+                           0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+// Constrain the overall publication list width so cards don't stretch full container
+.publications {
+  max-width: var(--pub-card-max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+ol.bibliography {
+  padding-left: 0 !important; // !important overrides _base.scss list-style reset
+
+  li {
+    // --- Panel card ---
+    position: relative; // enables the ::before left-accent bar to absolute-position
+    overflow: hidden;   // clips the ::before bar to the rounded corners
+    background: var(--pub-card-bg);
+    border-radius: var(--pub-card-radius);
+    padding: var(--pub-card-padding);
+    margin-bottom: 1.5rem !important; // resets _base.scss margin-bottom:0
+    border-top: none;
+    list-style: none;
+    box-shadow: var(--pub-card-shadow);
+
     @media (prefers-reduced-motion: no-preference) {
-      transition: background-color 150ms ease;
+      transition: box-shadow 200ms ease, transform 200ms ease;
     }
 
     &:hover {
-      background-color: var(--global-card-bg-color);
+      box-shadow: var(--pub-card-shadow-hover);
+      transform: translateY(-1px);
+    }
+
+    // --- Left accent bar (hover-only) ---
+    // Sits inside the card's rounded corners (because of overflow:hidden above).
+    // Hidden by default (opacity:0) and fades in on hover. To change
+    // color/width/timing, edit --pub-card-accent-color / --pub-card-accent-width
+    // or the transition duration below.
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--pub-card-accent-width);
+      background: var(--pub-card-accent-color);
+      opacity: 0;
+
+      @media (prefers-reduced-motion: no-preference) {
+        transition: opacity 200ms ease;
+      }
+    }
+
+    &:hover::before {
+      opacity: 1;
     }
 
     // -----------------------------------------------------------------------
-    // Thumbnail column (.col-sm-2.abbr)
+    // Row layout — bypass Bootstrap's grid widths entirely and use a clean
+    // two-column flexbox. This avoids stacking caused by Bootstrap's
+    // `col-sm-8 { flex: 0 0 66.67% }` fighting our overrides.
     // -----------------------------------------------------------------------
+    .row {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      align-items: flex-start;
+      margin-left: 0 !important;  // cancel Bootstrap's -15px negative margins
+      margin-right: 0 !important;
+      gap: var(--pub-thumb-gap);
+    }
+
+    // Thumbnail column — fixed width on the LEFT
     .abbr {
-      // Keep the badge (venue abbreviation) and thumbnail stacked vertically
-      // with consistent spacing between them
+      // height: auto !important overrides _base.scss's `height: 2rem`
+      height: auto !important;
+      flex: 0 0 var(--pub-thumb-width) !important;
+      max-width: var(--pub-thumb-width) !important;
+      width: var(--pub-thumb-width);
+      padding-left: 0 !important;   // cancel Bootstrap col padding
+      padding-right: 0 !important;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      gap: 0.4rem;
+      gap: 0.5rem;
 
-      // Venue badge. width: auto overrides _base.scss's width: 100% (which
-      // loads after _layout) to keep the badge compact rather than full-width.
       abbr {
         display: inline-block;
         background-color: var(--global-theme-color);
         width: auto !important;
         min-width: 3rem;
         text-align: center;
-        margin-bottom: 0 !important; // gap handles spacing now
+        margin-bottom: 0 !important;
 
         a {
           color: white;
@@ -147,42 +241,59 @@ ol.bibliography {
       }
     }
 
-    // Preview image — fixed container size, consistent across all entries.
-    // max-width uses !important to override the 200px set in _base.scss which
-    // loads after _layout in the import order.
-    // Also target the wrapping <figure> that figure.liquid emits for local images.
-    figure.preview,
+    // Content column — fills remaining row width on the RIGHT
+    .col-sm-8,
+    .col-sm-10 {
+      flex: 1 1 0 !important;       // grow from 0 basis so width is computed, not content-driven
+      max-width: none !important;
+      min-width: 0;                 // allow shrink below intrinsic content width
+      padding-left: 0 !important;   // cancel Bootstrap col padding
+      padding-right: 0 !important;
+    }
+
+    // -----------------------------------------------------------------------
+    // Preview image
+    // figure.liquid emits <figure><picture><img class="preview"></picture></figure>
+    // The figure/picture get NO class. Without explicit width:100% on the figure
+    // itself, it sizes to natural content width and the img's width:100% becomes
+    // 100% of that smaller size instead of filling the thumbnail column.
+    // -----------------------------------------------------------------------
+    figure {
+      display: block;
+      width: 100%;
+      max-width: var(--pub-thumb-width);
+      margin: 0;
+    }
+
+    figure picture {
+      display: block;
+      width: 100%;
+    }
+
+    figure img,
     .preview {
       display: block;
       width: 100% !important;
-      max-width: 96px !important;
-      height: 72px;
+      max-width: var(--pub-thumb-width) !important;
+      height: auto;
+      max-height: var(--pub-thumb-max-height);
       object-fit: cover;
       object-position: center top;
-      border-radius: 6px;
-      background-color: var(--global-card-bg-color);
-      margin: 0; // figure has default margins we don't want here
-    }
-
-    figure.preview img {
-      width: 100%;
-      height: 72px;
-      max-width: 96px !important;
-      object-fit: cover;
-      object-position: center top;
-      border-radius: 6px;
+      border-radius: 8px;
+      background-color: transparent;
     }
 
     // -----------------------------------------------------------------------
     // Content column
     // -----------------------------------------------------------------------
-    // Use !important only here to ensure 600 beats _base's "bolder" which
-    // loads after _layout in main.scss. "bolder" is relative and can render
-    // heavier than 600 depending on the loaded font; we want consistent weight.
+    // font-weight: 700 with !important beats _base.scss's "bolder" keyword
+    // (which is relative and can exceed 700 depending on loaded font).
     .title {
-      font-weight: 600 !important;
-      line-height: 1.45;
-      margin-bottom: 0.15rem;
+      font-size: 1.05rem;
+      font-weight: 700 !important;
+      line-height: 1.3;
+      margin-bottom: 0.3rem;
+      color: var(--global-text-color);
     }
 
     .author {
@@ -190,11 +301,11 @@ ol.bibliography {
       color: var(--global-text-color-light);
       margin-bottom: 0.1rem;
 
-      // Self-author emphasis
+      // Self-author: bold and normal (not italic) — per design spec
       > em {
+        font-weight: 700;
+        font-style: normal; // !important not needed; specificity is sufficient
         color: var(--global-text-color);
-        font-style: normal;
-        border-bottom: 1px solid var(--global-text-color);
       }
 
       a {
@@ -220,53 +331,140 @@ ol.bibliography {
       }
     }
 
+    // Venue + year line — italic gray, slight top margin
     .periodical {
       font-size: 0.88rem;
       color: var(--global-text-color-light);
+      font-style: italic;
+      margin-top: 0.35rem;
     }
 
     // -----------------------------------------------------------------------
-    // Link buttons — compact, no awkward wrapping
+    // Link buttons — pill style with color coding
     // -----------------------------------------------------------------------
     .links {
-      margin-top: 0.4rem;
+      margin-top: 0.6rem;
       display: flex;
       flex-wrap: wrap;
-      gap: 0.3rem;
+      gap: 0.4rem;
       align-items: center;
 
+      // Base pill reset — overrides _base.scss z-depth-0 defaults.
+      // padding !important overrides _base.scss's 1rem horizontal padding.
       a.btn {
-        color: var(--global-text-color);
-        border: 1px solid var(--global-divider-color);
-        // Use !important to override _base.scss padding-left/right: 1rem which
-        // loads after _layout and would otherwise expand button width.
-        padding: 0.15rem 0.6rem !important;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: #ffffff;
+        border-radius: 999px !important;
+        padding: 0.35rem 0.85rem !important;
         font-size: 0.78rem;
-        line-height: 1.4;
-        margin: 0 !important; // gap handles spacing
+        font-weight: 500;
+        line-height: 1.3;
+        margin: 0 !important;
+        border-width: 1.5px !important;
+        border-style: solid !important;
+        text-decoration: none;
 
         @media (prefers-reduced-motion: no-preference) {
-          transition: color 150ms ease, border-color 150ms ease;
+          transition: background-color 150ms ease, color 150ms ease,
+            border-color 150ms ease;
         }
 
+        // Default neutral style (fallback for any unstyled btn)
+        color: #555;
+        border-color: #ccc;
+
         &:hover {
-          color: var(--global-theme-color);
-          border-color: var(--global-theme-color);
+          background: #f7f7f7;
           text-decoration: none;
         }
       }
 
+      // Paper / PDF / HTML — blue
+      a.btn-paper {
+        color: #0066cc;
+        border-color: #0066cc !important;
+
+        &:hover {
+          background: #e8f1fb;
+        }
+      }
+
+      // Code — green
+      a.btn-code {
+        color: #1a7f37;
+        border-color: #1a7f37 !important;
+
+        &:hover {
+          background: #e6f4ea;
+        }
+      }
+
+      // Slides — orange
+      a.btn-slides {
+        color: #c45e00;
+        border-color: #c45e00 !important;
+
+        &:hover {
+          background: #fdf0e2;
+        }
+      }
+
+      // Website — purple
+      a.btn-website {
+        color: #6930c3;
+        border-color: #6930c3 !important;
+
+        &:hover {
+          background: #f0eafb;
+        }
+      }
+
+      // Video — red
+      a.btn-video {
+        color: #c0392b;
+        border-color: #c0392b !important;
+
+        &:hover {
+          background: #fdecea;
+        }
+      }
+
+      // Secondary (Abs, Bib, arXiv, Supp, Blog, Poster) — neutral gray
+      a.btn-secondary-pill {
+        color: #555;
+        border-color: #aaa !important;
+
+        &:hover {
+          background: #f0f0f0;
+        }
+      }
+
+      // Award badge — keep existing highlight color styling
       a.award.btn {
-        border-color: var(--global-highlight-color);
+        border-color: var(--global-highlight-color) !important;
         color: var(--global-highlight-color);
+
+        &:hover {
+          background: rgba(183, 28, 28, 0.06);
+        }
       }
     }
   }
 
-  // First entry has no top divider (it already sits under the h2.bibliography line)
+  // No extra top margin on the first card (it sits directly under the section h2)
   li:first-child {
-    border-top: none;
-    padding-top: 0.75rem;
+    margin-top: 0;
+  }
+}
+
+// Dark mode button adjustment — white bg becomes dark card bg so pills remain legible
+html[data-theme="dark"] ol.bibliography li .links a.btn {
+  background: var(--global-card-bg-color);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.07);
   }
 }
 
@@ -274,11 +472,23 @@ ol.bibliography {
  * Mobile — publication card stacking
  ******************************************************************************/
 
+// Mobile overrides for publication cards. To adjust the mobile breakpoint
+// thumbnail size, change --pub-thumb-width-mobile / --pub-thumb-max-height-mobile.
 @media (max-width: 575.98px) {
+  :root {
+    --pub-thumb-width-mobile: 160px;
+    --pub-thumb-max-height-mobile: 120px;
+  }
+
   ol.bibliography {
     li {
-      // When Bootstrap stacks the columns, keep thumbnail small and left-aligned
+      padding: 1.25rem;
+      border-radius: 10px;
+
+      // On mobile, the thumbnail column shrinks and stacks above the text
       .abbr {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
         flex-direction: row;
         align-items: center;
         flex-wrap: wrap;
@@ -288,13 +498,13 @@ ol.bibliography {
 
       figure.preview,
       .preview {
-        max-width: 80px !important;
-        height: 60px;
+        max-width: var(--pub-thumb-width-mobile) !important;
+        max-height: var(--pub-thumb-max-height-mobile);
       }
 
       figure.preview img {
-        max-width: 80px !important;
-        height: 60px;
+        max-width: var(--pub-thumb-width-mobile) !important;
+        max-height: var(--pub-thumb-max-height-mobile);
       }
     }
   }
